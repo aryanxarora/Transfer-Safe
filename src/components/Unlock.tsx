@@ -17,7 +17,7 @@ const Unlock = () => {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState("")
   const [fileURL, setFileURL] = useState(
-    "https://firebasestorage.googleapis.com/v0/b/transfer-safe.appspot.com/o/amex.xls?alt=media&token=70425d1c-d37a-4988-a69d-9689d78da6d0" as string,
+    "https://firebasestorage.googleapis.com/v0/b/transfer-safe.appspot.com/o/ARORA-ARYAN-TURKISH-AIRLINES.pdf?alt=media&token=25072ddf-9226-4771-b7e2-fac44618787f" as string,
   )
   const handleUnlock = () => {
     if (displayFile) {

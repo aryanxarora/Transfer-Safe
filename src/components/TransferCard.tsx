@@ -21,17 +21,21 @@ const TransferCard = () => {
   const [message, setMessage] = useState<string>("")
   const [error, setError] = useState("")
   const [success, setSuccess] = useState("")
+  const [disabled, setDisabled] = useState(false)
 
   const handleTransfer = (e: any) => {
     e.preventDefault()
+    setDisabled(true)
     setError("")
     setSuccess("")
     if (!file) {
       setError("Please upload a file")
+      setDisabled(false)
       return
     }
     if (receiverEmail === "" || senderEmail === "") {
       setError("Please enter receiver and sender email")
+      setDisabled(false)
       return
     }
     const storageRef = ref(storage, file.name)
@@ -53,7 +57,7 @@ const TransferCard = () => {
       message: message,
     }
     setSuccess("File transferred successfully")
-
+    setDisabled(false)
     // POST METHOD TO SERVER
     console.log(data)
   }
@@ -139,7 +143,9 @@ const TransferCard = () => {
             {success}
           </p>
         )}
-        <Button onClick={handleTransfer}>Transfer</Button>
+        <Button onClick={handleTransfer} disabled={disabled}>
+          Transfer
+        </Button>
         <a href="/unlock" className="text-xs text-neutral-400 underline">
           Unlock file instead
         </a>
