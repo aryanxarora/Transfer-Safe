@@ -51,15 +51,37 @@ const TransferCard = () => {
 
   const handleServerUpload = async (file_url: string) => {
     let data = {
-      file_url: file_url,
-      receiver_email: receiverEmail,
-      sender_email: senderEmail,
+      file: file_url,
+      recipient: receiverEmail,
+      sender: senderEmail,
       message: message,
     }
-    setSuccess("File transferred successfully")
-    setDisabled(false)
-    // POST METHOD TO SERVER
-    console.log(data)
+
+    try {
+      const response = await fetch(
+        "https://tired-badgers-reply.loca.lt/api/encrypt",
+        {
+          method: "POST",
+          headers: {
+            "bypass-tunnel-reminder": "0",
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        },
+      )
+
+      const res = await response.json()
+      console.log(res)
+      if (response.status !== 200) {
+        throw new Error(res.error)
+      } else {
+        setSuccess(res.message)
+        setDisabled(false)
+      }
+    } catch (error: any) {
+      setError(error.message)
+      setDisabled(false)
+    }
   }
 
   return (
@@ -110,15 +132,10 @@ const TransferCard = () => {
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
               viewBox="0 0 24 24"
-              strokeWidth={1.5}
               stroke="currentColor"
               className="w-4 h-4"
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.007v.008H12v-.008Z"
-              />
+              <path d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.007v.008H12v-.008Z" />
             </svg>
             {error}
           </p>
@@ -129,15 +146,10 @@ const TransferCard = () => {
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
               viewBox="0 0 24 24"
-              strokeWidth={1.5}
               stroke="currentColor"
               className="w-4 h-4"
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M10.125 2.25h-4.5c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125v-9M10.125 2.25h.375a9 9 0 0 1 9 9v.375M10.125 2.25A3.375 3.375 0 0 1 13.5 5.625v1.5c0 .621.504 1.125 1.125 1.125h1.5a3.375 3.375 0 0 1 3.375 3.375M9 15l2.25 2.25L15 12"
-              />
+              <path d="M10.125 2.25h-4.5c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125v-9M10.125 2.25h.375a9 9 0 0 1 9 9v.375M10.125 2.25A3.375 3.375 0 0 1 13.5 5.625v1.5c0 .621.504 1.125 1.125 1.125h1.5a3.375 3.375 0 0 1 3.375 3.375M9 15l2.25 2.25L15 12" />
             </svg>
 
             {success}
