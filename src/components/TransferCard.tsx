@@ -59,7 +59,7 @@ const TransferCard = () => {
 
     try {
       const response = await fetch(
-        "https://tired-badgers-reply.loca.lt/api/encrypt",
+        "https://stupid-turtles-greet.loca.lt/api/encrypt",
         {
           method: "POST",
           headers: {

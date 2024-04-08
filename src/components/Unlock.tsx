@@ -12,18 +12,26 @@ import { Label } from "@/components/ui/label"
 import { useState } from "react"
 import { RadioGroup, RadioGroupItem } from "./ui/radio-group"
 
+interface typeData {
+  id: number
+  emailTo: string
+  emailFrom: string
+  file_url: string
+  message: string
+  createdAt: string
+  updatedAt: string
+}
+
 const Unlock = () => {
   const [displayFile, setDisplayFile] = useState(false)
   const [option, setOption] = useState("decrypt" as string)
   const [password, setPassword] = useState("")
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState("")
-  const [fileURL, setFileURL] = useState(
-    "https://firebasestorage.googleapis.com/v0/b/transfer-safe.appspot.com/o/ARORA-ARYAN-TURKISH-AIRLINES.pdf?alt=media&token=25072ddf-9226-4771-b7e2-fac44618787f" as string,
-  )
+  const [fileData, setFileData] = useState<any>([])
 
   const fetchFile = async () => {
-    const API_URI = `https://tired-badgers-reply.loca.lt/api/${option}`
+    const API_URI = `https://stupid-turtles-greet.loca.lt/api/${option}`
     console.log(API_URI)
 
     try {
@@ -40,11 +48,11 @@ const Unlock = () => {
       })
 
       const data = await response.json()
-      console.log(data)
+      console.log(data.data)
       if (response.status !== 200) {
         throw new Error(data.error)
       } else {
-        setFileURL(data.file_url)
+        setFileData(data.data)
         setLoading(false)
       }
     } catch (error: any) {
@@ -98,25 +106,42 @@ const Unlock = () => {
                   <path d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
                 </svg>
               ) : (
-                <div>
+                <div className="w-full">
                   {error === "" ? (
-                    <a
-                      href={`${fileURL}`}
-                      className="flex flex-col items-center justify-cente gap-3"
-                      target="_blank"
-                      rel="noreferrer"
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                        className="w-5 h-5"
-                      >
-                        <path d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
-                      </svg>
-                      <p className="text-xs">Download File</p>
-                    </a>
+                    <>
+                      {fileData.map((item: typeData, index: number) => (
+                        <a
+                          key={index}
+                          href={`${item.file_url}`}
+                          className="flex flex-col items-center justify-start gap-3 w-full"
+                          target="_blank"
+                          rel="noreferrer"
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                            className="w-5 h-5"
+                          >
+                            <path d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
+                          </svg>
+                          <p className="text-xs">Download File</p>
+                          <div className="w-full flex gap-1">
+                            <p className="text-xs font-semibold">
+                              Sender Email:{" "}
+                            </p>
+                            <p className="text-xs">{item.emailFrom}</p>
+                          </div>
+                          <div className="w-full flex gap-1">
+                            <p className="text-xs font-semibold">
+                              Created at:{" "}
+                            </p>
+                            <p className="text-xs">{item.createdAt}</p>
+                          </div>
+                        </a>
+                      ))}
+                    </>
                   ) : (
                     <p className="text-red-500 text-xs flex gap-1 items-center justify-center">
                       <svg
